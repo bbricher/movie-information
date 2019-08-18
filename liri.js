@@ -6,6 +6,8 @@ var keys = require("./keys.js");
 
 var Spotify = require('node-spotify-api');
 
+var fs = require("fs")
+
 var spotify = new Spotify(keys.spotify);
 
 var axios = require('axios');
@@ -21,15 +23,6 @@ for (let i = 3; i < process.argv.length; i++) {
         userInput = process.argv[i];
     }
 }
-
-var urlConcerts = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp";
-
-var urlOMBD = "http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy";
-
-
-
-
-
 
 if (searchType === "concert-this") {
     var urlConcerts = "https://rest.bandsintown.com/artists/" + userInput + "/events?app_id=codingbootcamp";
@@ -50,7 +43,6 @@ if (searchType === "concert-this") {
         console.log("Song: " + data.name);
         console.log("Preview: " + data.preview_url);
         console.log("Album: " + data.album.name);
-        // console.log(data); 
         })
         .catch(function(err) {
         console.error('Error occurred: ' + err); 
@@ -68,15 +60,29 @@ if (searchType === "concert-this") {
     }
 
 } else if (searchType === "movie-this") {
-    if (process.argv.length < 3) {
+    if (process.argv.length === 3) {
         userInput = "Mr.+Nobody"
     }
+    var urlOMBD = "http://www.omdbapi.com/?t=" + userInput + "&y=&plot=short&apikey=trilogy";
     axios.get(urlOMBD)
     .then(function(response) {
-        
+        console.log("Title: " + response.data.Title);
+        console.log("Year: " + response.data.Year);
+        console.log("IMDB Rating: " + response.data.Ratings[0].Value);
+        console.log("Rotten Tomatoes Rating: " + response.data.Ratings[1].Value);
+        console.log("Production Country: " + response.data.Country);
+        console.log("Language: " + response.data.Language);
+        console.log("Plot: " + response.data.Plot);
+        console.log("Actors: " + response.data.Actors);
     });
 } else if (searchType === "do-what-it-says") {
-
+    fs.readFile("random.txt", "utf8", function(error, data) {
+    console.log(data);
+    searchType = data;
+    if (error) {
+        return console.log(error);
+    }
+    })
 }
 
 
