@@ -8,6 +8,8 @@ var Spotify = require('node-spotify-api');
 
 var fs = require("fs")
 
+var exec = require('child_process');
+
 var spotify = new Spotify(keys.spotify);
 
 var axios = require('axios');
@@ -77,8 +79,8 @@ if (searchType === "concert-this") {
     });
 } else if (searchType === "do-what-it-says") {
     fs.readFile("random.txt", "utf8", function(error, data) {
-    console.log(data);
-    searchType = data;
+    exec('"liri.js " + data');
+    // searchType = data;
     if (error) {
         return console.log(error);
     }
